@@ -320,25 +320,18 @@ def load_client_data(client_id=None):
         if not gc:
             return get_demo_data()
             
-        sheet_id = st.secrets.get("MASTER_SHEET_ID", "")
+        sheet_id = st.secrets.get("MASTER_SHEET_ID", "1oI-XqRbp8r3V8yMjnC5pNvDMljJDv4f6d01vRmrVH1g")
         
-        # Try different worksheet names
-        possible_names = ["Master Sheet"]
-        
+        # Connect directly to the MASTER SHEET worksheet
         spreadsheet = gc.open_by_key(sheet_id)
-        sheet = None
         
-        for name in possible_names:
-            try:
-                sheet = spreadsheet.worksheet(name)
-                st.success(f"Connected to worksheet: {name}")
-                break
-            except:
-                continue
-        
-        if not sheet:
+        try:
+            sheet = spreadsheet.worksheet("MASTER SHEET")
+            st.success("Connected to worksheet: MASTER SHEET")
+        except Exception as e:
             available_sheets = [ws.title for ws in spreadsheet.worksheets()]
-            st.error(f"No matching worksheet found. Available sheets: {available_sheets}")
+            st.error(f"Cannot access MASTER SHEET. Available sheets: {available_sheets}")
+            st.error(f"Error details: {str(e)}")
             return get_demo_data()
         
         # Get data
