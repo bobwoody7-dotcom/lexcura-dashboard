@@ -1,6 +1,6 @@
 # LexCura Interactive Compliance Dashboard
-# Production-ready Streamlit app for 503B compliance monitoring
-# Fixed version with updated Streamlit functions
+# Premium Production-ready Streamlit app for 503B compliance monitoring
+# Luxury Edition with Premium Design
 
 import streamlit as st
 import pandas as pd
@@ -16,124 +16,279 @@ import numpy as np
 
 # Page configuration
 st.set_page_config(
-    page_title="LexCura Compliance Dashboard",
-    page_icon="⚕️",
+    page_title="LexCura Elite Compliance",
+    page_icon="⚜️",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for premium dark theme
+# Premium Dark Luxury Theme CSS
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+    
     .stApp {
-        background-color: #111827;
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+        color: #f8f9fa;
     }
     
     .main-header {
-        background: linear-gradient(45deg, #D4AF37, #C0C0C0);
+        background: linear-gradient(135deg, #d4af37 0%, #f4e8c1 50%, #c9a961 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-size: 3rem;
-        font-weight: bold;
+        font-size: 2.8rem;
+        font-weight: 700;
         text-align: center;
-        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Playfair Display', serif;
+        margin: 2rem 0;
+        text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        position: relative;
+    }
+    
+    .main-header::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    }
+    
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-bottom: 1rem;
     }
     
+    .logo-container img {
+        max-height: 80px;
+        filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+    }
+    
     .client-info-card {
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(192, 192, 192, 0.1));
-        border: 1px solid #D4AF37;
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 32px rgba(212, 175, 55, 0.1);
-        backdrop-filter: blur(10px);
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .client-info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #d4af37, transparent);
     }
     
     .metric-container {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
-        padding: 1rem;
-        border-left: 4px solid #D4AF37;
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.8) 0%, rgba(25, 25, 25, 0.8) 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border-left: 3px solid #d4af37;
         margin: 0.5rem 0;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .metric-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+        pointer-events: none;
+    }
+    
+    .metric-container:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        border-left-color: #f4e8c1;
     }
     
     .alert-red {
-        border-left-color: #DC2626 !important;
-        background: rgba(220, 38, 38, 0.1);
+        border-left-color: #dc3545 !important;
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(25, 25, 25, 0.8) 100%);
     }
     
     .alert-amber {
-        border-left-color: #F59E0B !important;
-        background: rgba(245, 158, 11, 0.1);
+        border-left-color: #ffc107 !important;
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(25, 25, 25, 0.8) 100%);
     }
     
     .alert-green {
-        border-left-color: #10B981 !important;
-        background: rgba(16, 185, 129, 0.1);
+        border-left-color: #28a745 !important;
+        background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(25, 25, 25, 0.8) 100%);
     }
     
     .stButton > button {
-        background: linear-gradient(45deg, #D4AF37, #C0C0C0);
-        color: #111827;
+        background: linear-gradient(135deg, #d4af37 0%, #f4e8c1 50%, #c9a961 100%);
+        color: #000000;
         border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-        box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+        border-radius: 12px;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        padding: 0.75rem 1.5rem;
+        box-shadow: 
+            0 8px 20px rgba(212, 175, 55, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 
+            0 12px 30px rgba(212, 175, 55, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        background: linear-gradient(135deg, #f4e8c1 0%, #d4af37 50%, #c9a961 100%);
     }
     
     .chart-container {
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 15px;
-        padding: 1rem;
-        margin: 1rem 0;
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
         border: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: 
+            0 15px 35px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .chart-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
     }
     
     .download-section {
-        background: linear-gradient(135deg, rgba(173, 216, 230, 0.1), rgba(128, 128, 128, 0.1));
-        border-radius: 10px;
-        padding: 1rem;
-        margin-top: 2rem;
-        border: 1px solid #ADD8E6;
+        background: linear-gradient(135deg, rgba(40, 40, 40, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-top: 3rem;
+        border: 1px solid rgba(248, 249, 250, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .executive-summary {
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        position: relative;
+    }
+    
+    .executive-summary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    }
+    
+    .section-title {
+        color: #d4af37;
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 1px;
+        background: #d4af37;
     }
     
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(26, 26, 26, 0.5);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #d4af37, #c9a961);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #f4e8c1, #d4af37);
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# Chart styling configuration
+# Premium Color Palette
 CHART_COLORS = {
-    'gold': '#D4AF37',
-    'silver': '#C0C0C0', 
-    'grey': '#808080',
-    'light_blue': '#ADD8E6',
-    'white': '#FFFFFF',
-    'background': '#111827',
-    'red': '#DC2626',
-    'amber': '#F59E0B',
-    'green': '#10B981'
+    'primary_gold': '#D4AF37',      # Elegant gold
+    'secondary_gold': '#F4E8C1',    # Light champagne gold
+    'tertiary_gold': '#C9A961',     # Muted bronze gold
+    'white': '#F8F9FA',             # Clean white
+    'light_grey': '#E9ECEF',        # Light grey
+    'medium_grey': '#6C757D',       # Medium grey
+    'dark_grey': '#343A40',         # Dark grey
+    'charcoal': '#2D2D2D',          # Charcoal
+    'black': '#1A1A1A',             # Rich black
+    'background': '#0A0A0A',        # Deep background
+    'success': '#28A745',           # Success green
+    'warning': '#FFC107',           # Warning amber
+    'danger': '#DC3545',            # Danger red
+    'accent_blue': '#17A2B8'        # Accent blue
 }
 
+# Premium Typography
 CHART_FONT = {
-    'family': 'Montserrat, Helvetica Neue, Arial, sans-serif',
-    'title_size': 25,
-    'axis_x_size': 21,
-    'axis_y_size': 18,
-    'axis_title_size': 18,
-    'data_label_size': 15
+    'family': 'Inter, Helvetica Neue, Arial, sans-serif',
+    'title_family': 'Playfair Display, serif',
+    'title_size': 28,
+    'subtitle_size': 22,
+    'axis_x_size': 14,
+    'axis_y_size': 14,
+    'axis_title_size': 16,
+    'data_label_size': 12,
+    'legend_size': 13
 }
 
 @st.cache_data(ttl=300)
@@ -161,15 +316,16 @@ def connect_to_sheets():
 
 @st.cache_data(ttl=60)
 def load_client_data(client_id=None):
-    """Load client data from MASTER sheet ROW 2"""
+    """Load client data from Compliance_Master_Sheet -> Master Sheet tab ROW 2"""
     try:
         gc = connect_to_sheets()
         if not gc:
             return get_dummy_data()
             
-        # Open the MASTER sheet (replace with your actual sheet ID)
+        # Open the Compliance_Master_Sheet and access Master Sheet tab
         sheet_id = st.secrets.get("MASTER_SHEET_ID", "your-sheet-id-here")
-        sheet = gc.open_by_key(sheet_id).worksheet("MASTER")
+        spreadsheet = gc.open_by_key(sheet_id)
+        sheet = spreadsheet.worksheet("Master Sheet")  # Updated worksheet name
         
         # Get headers from row 1 and data from row 2
         headers = sheet.row_values(1)
@@ -182,12 +338,12 @@ def load_client_data(client_id=None):
         # Create data dictionary
         data = dict(zip(headers, row_data))
         
-        # Column mapping for MASTER sheet (A-V)
+        # Column mapping for Master Sheet
         columns = {
-            'UNIQUE CLIENT ID': data.get('UNIQUE CLIENT ID', 'CB999'),
-            'CLIENT NAME': data.get('CLIENT NAME', 'Demo Client'),
-            'TIER': data.get('TIER', 'Premium'),
-            'REGION': data.get('REGION', 'Northeast'),
+            'UNIQUE CLIENT ID': data.get('UNIQUE CLIENT ID', '11AA'),  # Updated client ID
+            'CLIENT NAME': data.get('CLIENT NAME', 'Premier Client'),
+            'TIER': data.get('TIER', 'Elite'),
+            'REGION': data.get('REGION', 'Premium Zone'),
             'MAIN STRUCTURED CONTENT': data.get('MAIN STRUCTURED CONTENT', ''),
             'EXECUTIVE SUMMARY': data.get('EXECUTIVE SUMMARY', ''),
             'ALERT LEVEL': data.get('ALERT LEVEL', 'GREEN'),
@@ -199,310 +355,403 @@ def load_client_data(client_id=None):
         
     except Exception as e:
         st.warning(f"Could not load live data: {str(e)}")
-        st.info("Using demo data for dashboard preview")
+        st.info("Using premium demo data for dashboard preview")
         return get_dummy_data()
 
 def get_dummy_data():
-    """Return dummy data for immediate deployment and testing"""
+    """Return premium dummy data for immediate deployment and testing"""
     return {
-        'UNIQUE CLIENT ID': 'CB999',
-        'CLIENT NAME': 'Premier Sterile Solutions',
-        'TIER': 'Premium',
-        'REGION': 'Northeast',
-        'MAIN STRUCTURED CONTENT': 'Sample compliance content for demo purposes. This would contain regulatory updates, inspection findings, and compliance analysis.',
-        'EXECUTIVE SUMMARY': 'Q3 compliance review shows strong performance with 94% compliance score. Key areas of focus include environmental monitoring and personnel training updates.',
+        'UNIQUE CLIENT ID': '11AA',  # Updated client ID
+        'CLIENT NAME': 'Elite Pharmaceutical Solutions',
+        'TIER': 'Platinum',
+        'REGION': 'Northeast Excellence Hub',
+        'MAIN STRUCTURED CONTENT': 'Premium compliance content for elite pharmaceutical operations. Comprehensive regulatory analysis, advanced monitoring protocols, and executive-level compliance insights.',
+        'EXECUTIVE SUMMARY': 'Q3 Elite Performance Review: Exceptional compliance achievement with 97.8% excellence rating. Premium service delivery includes advanced environmental monitoring, executive training protocols, and predictive compliance analytics.',
         'ALERT LEVEL': 'GREEN',
-        'STATUS': 'Active',
+        'STATUS': 'Platinum Active',
         'DATE SCRAPED': datetime.now().strftime('%Y-%m-%d')
     }
 
-def create_chart_layout(title):
-    """Create standardized chart layout with premium styling"""
+def create_premium_chart_layout(title):
+    """Create premium chart layout with luxury styling"""
     return {
         'title': {
-            'text': title,
+            'text': f'<b>{title}</b>',
             'font': {
-                'family': CHART_FONT['family'],
+                'family': CHART_FONT['title_family'],
                 'size': CHART_FONT['title_size'],
-                'color': CHART_COLORS['white']
+                'color': CHART_COLORS['primary_gold']
             },
             'x': 0.5,
             'xanchor': 'center'
         },
         'paper_bgcolor': CHART_COLORS['background'],
-        'plot_bgcolor': CHART_COLORS['background'],
-        'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family']},
-        'margin': dict(l=60, r=60, t=80, b=60),
-        'height': 400
+        'plot_bgcolor': CHART_COLORS['black'],
+        'font': {
+            'color': CHART_COLORS['white'], 
+            'family': CHART_FONT['family'],
+            'size': CHART_FONT['legend_size']
+        },
+        'margin': dict(l=70, r=70, t=100, b=70),
+        'height': 450,
+        'showlegend': True,
+        'legend': {
+            'font': {
+                'color': CHART_COLORS['white'], 
+                'family': CHART_FONT['family'],
+                'size': CHART_FONT['legend_size']
+            },
+            'bgcolor': 'rgba(26, 26, 26, 0.8)',
+            'bordercolor': CHART_COLORS['primary_gold'],
+            'borderwidth': 1
+        }
     }
 
 def chart_1_financial_impact():
-    """Financial Impact Chart (Bar/Column)"""
-    # Dummy data - replace with real data from ROW 2
+    """Premium Financial Impact Analysis"""
     categories = ['Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024 (Proj)']
-    cost_savings = [185000, 220000, 195000, 240000]
-    compliance_costs = [45000, 38000, 52000, 41000]
+    cost_savings = [285000, 320000, 295000, 340000]
+    compliance_costs = [65000, 58000, 72000, 61000]
     
     fig = go.Figure()
     
-    # Cost savings bars
+    # Premium cost savings bars
     fig.add_trace(go.Bar(
         x=categories,
         y=cost_savings,
-        name='Cost Savings',
-        marker_color=CHART_COLORS['gold'],
-        hovertemplate='<b>%{fullData.name}</b><br>%{x}<br>$%{y:,.0f}<extra></extra>',
+        name='Elite Cost Optimization',
+        marker=dict(
+            color=CHART_COLORS['primary_gold'],
+            line=dict(color=CHART_COLORS['secondary_gold'], width=2)
+        ),
+        hovertemplate='<b>%{fullData.name}</b><br>%{x}<br><b>$%{y:,.0f}</b><extra></extra>',
         text=['$' + f'{val:,.0f}' for val in cost_savings],
         textposition='auto',
-        textfont=dict(size=CHART_FONT['data_label_size'], color=CHART_COLORS['background'], family=CHART_FONT['family'])
+        textfont=dict(
+            size=CHART_FONT['data_label_size'], 
+            color=CHART_COLORS['black'], 
+            family=CHART_FONT['family'],
+            weight='bold'
+        )
     ))
     
-    # Compliance costs bars
+    # Premium compliance investment bars
     fig.add_trace(go.Bar(
         x=categories,
         y=compliance_costs,
-        name='Compliance Costs',
-        marker_color=CHART_COLORS['light_blue'],
-        hovertemplate='<b>%{fullData.name}</b><br>%{x}<br>$%{y:,.0f}<extra></extra>',
+        name='Premium Service Investment',
+        marker=dict(
+            color=CHART_COLORS['medium_grey'],
+            line=dict(color=CHART_COLORS['light_grey'], width=2)
+        ),
+        hovertemplate='<b>%{fullData.name}</b><br>%{x}<br><b>$%{y:,.0f}</b><extra></extra>',
         text=['$' + f'{val:,.0f}' for val in compliance_costs],
         textposition='auto',
-        textfont=dict(size=CHART_FONT['data_label_size'], color=CHART_COLORS['background'], family=CHART_FONT['family'])
+        textfont=dict(
+            size=CHART_FONT['data_label_size'], 
+            color=CHART_COLORS['white'], 
+            family=CHART_FONT['family'],
+            weight='bold'
+        )
     ))
     
-    layout = create_chart_layout('Financial Impact Analysis')
+    layout = create_premium_chart_layout('Elite Financial Performance Analytics')
     layout['xaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']),
-        title=dict(text='Quarter', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family']))
+        title=dict(
+            text='<b>Quarter</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['yaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']),
-        title=dict(text='Amount (USD)', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'])),
-        tickformat='$,.0f'
+        title=dict(
+            text='<b>Investment Value (USD)</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        tickformat='$,.0f',
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['barmode'] = 'group'
-    layout['legend'] = dict(font=dict(color=CHART_COLORS['white'], family=CHART_FONT['family']))
     
     fig.update_layout(layout)
     return fig
 
 def chart_2_compliance_excellence():
-    """Compliance Excellence Radar Chart"""
-    categories = ['Documentation', 'Training', 'Environmental<br>Monitoring', 
-                 'Quality Control', 'Facility<br>Standards', 'Process<br>Validation']
-    scores = [88, 94, 85, 91, 96, 87]
+    """Premium Compliance Excellence Radar"""
+    categories = ['Documentation<br>Excellence', 'Executive<br>Training', 'Environmental<br>Mastery', 
+                 'Quality<br>Leadership', 'Facility<br>Excellence', 'Process<br>Innovation']
+    scores = [94, 97, 91, 96, 98, 93]
     
     fig = go.Figure()
     
+    # Current performance with premium styling
     fig.add_trace(go.Scatterpolar(
-        r=scores + [scores[0]],  # Close the polygon
+        r=scores + [scores[0]],
         theta=categories + [categories[0]],
         fill='toself',
-        name='Current Performance',
-        line=dict(color=CHART_COLORS['gold'], width=3),
-        fillcolor=f"rgba{tuple(list(bytes.fromhex(CHART_COLORS['gold'][1:])) + [0.3])}",
-        hovertemplate='<b>%{theta}</b><br>Score: %{r}%<extra></extra>'
+        name='Elite Performance',
+        line=dict(color=CHART_COLORS['primary_gold'], width=4),
+        fillcolor=f"rgba(212, 175, 55, 0.2)",
+        marker=dict(size=8, color=CHART_COLORS['secondary_gold']),
+        hovertemplate='<b>%{theta}</b><br><b>Score: %{r}%</b><extra></extra>'
     ))
     
-    # Add target line
-    target_scores = [90] * len(categories)
+    # Premium target line
+    target_scores = [95] * len(categories)
     fig.add_trace(go.Scatterpolar(
         r=target_scores + [target_scores[0]],
         theta=categories + [categories[0]],
-        line=dict(color=CHART_COLORS['silver'], width=2, dash='dash'),
-        name='Target (90%)',
-        hovertemplate='<b>Target</b><br>%{theta}<br>Score: %{r}%<extra></extra>'
+        line=dict(color=CHART_COLORS['white'], width=2, dash='dash'),
+        name='Excellence Target (95%)',
+        hovertemplate='<b>Excellence Target</b><br>%{theta}<br><b>Score: %{r}%</b><extra></extra>'
     ))
     
-    layout = create_chart_layout('Compliance Excellence Radar')
+    layout = create_premium_chart_layout('Elite Compliance Excellence Matrix')
     layout['polar'] = dict(
         radialaxis=dict(
             visible=True,
             range=[0, 100],
-            tickfont=dict(size=14, color=CHART_COLORS['white'], family=CHART_FONT['family']),
-            gridcolor=CHART_COLORS['grey']
+            tickfont=dict(size=12, color=CHART_COLORS['white'], family=CHART_FONT['family']),
+            gridcolor=CHART_COLORS['dark_grey'],
+            linecolor=CHART_COLORS['medium_grey']
         ),
         angularaxis=dict(
-            tickfont=dict(size=CHART_FONT['axis_x_size'], color=CHART_COLORS['white'], family=CHART_FONT['family'])
-        )
+            tickfont=dict(size=CHART_FONT['axis_x_size'], color=CHART_COLORS['white'], family=CHART_FONT['family']),
+            gridcolor=CHART_COLORS['dark_grey'],
+            linecolor=CHART_COLORS['medium_grey']
+        ),
+        bgcolor=CHART_COLORS['black']
     )
-    layout['legend'] = dict(font=dict(color=CHART_COLORS['white'], family=CHART_FONT['family']))
     
     fig.update_layout(layout)
     return fig
 
 def chart_3_monitoring_dashboard():
-    """Compliance Monitoring Dashboard (Gauge/Line combination)"""
-    current_score = 94
+    """Premium Compliance Monitoring Executive Dashboard"""
+    current_score = 97
     
     fig = make_subplots(
         rows=1, cols=2,
         specs=[[{"type": "indicator"}, {"type": "scatter"}]],
-        subplot_titles=("Current Compliance Score", "Trend Over Time"),
+        subplot_titles=("<b>Executive Score</b>", "<b>Performance Trajectory</b>"),
         column_widths=[0.4, 0.6]
     )
     
-    # Gauge chart
+    # Premium gauge chart
     fig.add_trace(go.Indicator(
         mode="gauge+number+delta",
         value=current_score,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "Compliance Score", 'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family']}},
-        delta={'reference': 90, 'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family']}},
+        title={
+            'text': "<b>Elite Compliance</b>", 
+            'font': {'color': CHART_COLORS['primary_gold'], 'family': CHART_FONT['title_family'], 'size': 18}
+        },
+        delta={
+            'reference': 95, 
+            'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': 16}
+        },
         gauge={
-            'axis': {'range': [None, 100], 'tickcolor': CHART_COLORS['white']},
-            'bar': {'color': CHART_COLORS['gold']},
+            'axis': {
+                'range': [None, 100], 
+                'tickcolor': CHART_COLORS['white'],
+                'tickfont': {'family': CHART_FONT['family'], 'size': 12}
+            },
+            'bar': {'color': CHART_COLORS['primary_gold'], 'thickness': 0.8},
             'steps': [
-                {'range': [0, 60], 'color': CHART_COLORS['red']},
-                {'range': [60, 80], 'color': CHART_COLORS['amber']},
-                {'range': [80, 100], 'color': CHART_COLORS['green']}
+                {'range': [0, 70], 'color': CHART_COLORS['danger']},
+                {'range': [70, 85], 'color': CHART_COLORS['warning']},
+                {'range': [85, 95], 'color': CHART_COLORS['success']},
+                {'range': [95, 100], 'color': CHART_COLORS['primary_gold']}
             ],
             'threshold': {
-                'line': {'color': CHART_COLORS['white'], 'width': 4},
-                'thickness': 0.75,
-                'value': 95
-            }
+                'line': {'color': CHART_COLORS['white'], 'width': 5},
+                'thickness': 0.9,
+                'value': 98
+            },
+            'bordercolor': CHART_COLORS['primary_gold'],
+            'borderwidth': 3
         },
-        number={'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family']}}
+        number={'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': 36}}
     ), row=1, col=1)
     
-    # Trend line
+    # Premium trend line
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
-    trend_scores = [87, 89, 88, 91, 93, 90, 92, 94, 93, 94]
+    trend_scores = [91, 93, 92, 95, 96, 94, 95, 97, 96, 97]
     
     fig.add_trace(go.Scatter(
         x=months,
         y=trend_scores,
         mode='lines+markers',
-        name='Monthly Score',
-        line=dict(color=CHART_COLORS['light_blue'], width=3),
-        marker=dict(size=8, color=CHART_COLORS['gold']),
-        hovertemplate='<b>%{x}</b><br>Score: %{y}%<extra></extra>'
+        name='Elite Performance',
+        line=dict(color=CHART_COLORS['primary_gold'], width=4, shape='spline'),
+        marker=dict(size=10, color=CHART_COLORS['secondary_gold'], line=dict(color=CHART_COLORS['primary_gold'], width=2)),
+        fill='tonexty',
+        fillcolor=f"rgba(212, 175, 55, 0.1)",
+        hovertemplate='<b>%{x}</b><br><b>Score: %{y}%</b><extra></extra>'
     ), row=1, col=2)
     
-    layout = create_chart_layout('Compliance Monitoring Dashboard')
+    layout = create_premium_chart_layout('Premium Monitoring Executive Dashboard')
+    layout['height'] = 500
     fig.update_layout(layout)
-    fig.update_xaxes(color=CHART_COLORS['white'], tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']), row=1, col=2)
-    fig.update_yaxes(color=CHART_COLORS['white'], tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']), row=1, col=2)
+    fig.update_xaxes(
+        color=CHART_COLORS['white'], 
+        tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']),
+        gridcolor=CHART_COLORS['dark_grey'],
+        row=1, col=2
+    )
+    fig.update_yaxes(
+        color=CHART_COLORS['white'], 
+        tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']),
+        gridcolor=CHART_COLORS['dark_grey'],
+        range=[85, 100],
+        row=1, col=2
+    )
     
     return fig
 
 def chart_4_alert_status():
-    """Alert Status Indicator (Stacked Bar/Heatmap)"""
+    """Premium Alert Status Executive Overview"""
     fig = go.Figure()
     
-    # Alert data
-    departments = ['Quality Control', 'Manufacturing', 'Environmental', 'Training', 'Documentation']
-    green_alerts = [12, 8, 15, 6, 10]
-    amber_alerts = [3, 5, 2, 4, 1]
-    red_alerts = [0, 1, 0, 0, 2]
+    departments = ['Quality Excellence', 'Manufacturing Elite', 'Environmental Mastery', 'Executive Training', 'Documentation Premium']
+    excellent = [18, 14, 20, 10, 15]
+    attention = [2, 3, 1, 2, 1]
+    critical = [0, 0, 0, 0, 1]
     
     fig.add_trace(go.Bar(
         y=departments,
-        x=green_alerts,
-        name='Normal (Green)',
+        x=excellent,
+        name='Excellent Status',
         orientation='h',
-        marker_color=CHART_COLORS['green'],
-        hovertemplate='<b>%{y}</b><br>Normal: %{x}<extra></extra>'
+        marker=dict(color=CHART_COLORS['primary_gold'], line=dict(color=CHART_COLORS['secondary_gold'], width=1)),
+        hovertemplate='<b>%{y}</b><br><b>Excellent: %{x}</b><extra></extra>'
     ))
     
     fig.add_trace(go.Bar(
         y=departments,
-        x=amber_alerts,
-        name='Attention (Amber)',
+        x=attention,
+        name='Premium Attention',
         orientation='h',
-        marker_color=CHART_COLORS['amber'],
-        hovertemplate='<b>%{y}</b><br>Attention: %{x}<extra></extra>'
+        marker=dict(color=CHART_COLORS['warning'], line=dict(color=CHART_COLORS['white'], width=1)),
+        hovertemplate='<b>%{y}</b><br><b>Attention: %{x}</b><extra></extra>'
     ))
     
     fig.add_trace(go.Bar(
         y=departments,
-        x=red_alerts,
-        name='Critical (Red)',
+        x=critical,
+        name='Immediate Action',
         orientation='h',
-        marker_color=CHART_COLORS['red'],
-        hovertemplate='<b>%{y}</b><br>Critical: %{x}<extra></extra>'
+        marker=dict(color=CHART_COLORS['danger'], line=dict(color=CHART_COLORS['white'], width=1)),
+        hovertemplate='<b>%{y}</b><br><b>Critical: %{x}</b><extra></extra>'
     ))
     
-    layout = create_chart_layout('Alert Status by Department')
+    layout = create_premium_chart_layout('Elite Alert Status by Excellence Center')
     layout['barmode'] = 'stack'
     layout['xaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']),
-        title=dict(text='Number of Alerts', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family']))
+        title=dict(
+            text='<b>Alert Distribution</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['yaxis'] = dict(
         color=CHART_COLORS['white'],
-        tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family'])
+        tickfont=dict(size=CHART_FONT['axis_y_size']-1, family=CHART_FONT['family']),
+        gridcolor=CHART_COLORS['dark_grey']
     )
-    layout['legend'] = dict(font=dict(color=CHART_COLORS['white'], family=CHART_FONT['family']))
     
     fig.update_layout(layout)
     return fig
 
 def chart_5_risk_assessment():
-    """Risk Assessment Gauge (Dial)"""
-    risk_score = 23  # Low risk
+    """Premium Risk Assessment Executive Gauge"""
+    risk_score = 15  # Very low risk for premium service
     
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=risk_score,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "Overall Risk Level", 'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': CHART_FONT['title_size']}},
-        delta={'reference': 30, 'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family']}},
-        gauge={
-            'axis': {'range': [None, 100], 'tickcolor': CHART_COLORS['white'], 'tickfont': {'family': CHART_FONT['family']}},
-            'bar': {'color': CHART_COLORS['gold']},
-            'steps': [
-                {'range': [0, 30], 'color': CHART_COLORS['green']},
-                {'range': [30, 60], 'color': CHART_COLORS['amber']},
-                {'range': [60, 100], 'color': CHART_COLORS['red']}
-            ],
-            'threshold': {
-                'line': {'color': CHART_COLORS['white'], 'width': 4},
-                'thickness': 0.75,
-                'value': 40
+        title={
+            'text': "<b>Executive Risk Profile</b>", 
+            'font': {
+                'color': CHART_COLORS['primary_gold'], 
+                'family': CHART_FONT['title_family'], 
+                'size': 20
             }
         },
-        number={'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': 36}}
+        delta={
+            'reference': 25, 
+            'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': 16}
+        },
+        gauge={
+            'axis': {
+                'range': [None, 100], 
+                'tickcolor': CHART_COLORS['white'],
+                'tickfont': {'family': CHART_FONT['family'], 'size': 12}
+            },
+            'bar': {'color': CHART_COLORS['success'], 'thickness': 0.8},
+            'steps': [
+                {'range': [0, 25], 'color': CHART_COLORS['primary_gold']},
+                {'range': [25, 50], 'color': CHART_COLORS['warning']},
+                {'range': [50, 75], 'color': CHART_COLORS['danger']},
+                {'range': [75, 100], 'color': '#8B0000'}  # Dark red for extreme risk
+            ],
+            'threshold': {
+                'line': {'color': CHART_COLORS['white'], 'width': 5},
+                'thickness': 0.9,
+                'value': 30
+            },
+            'bordercolor': CHART_COLORS['primary_gold'],
+            'borderwidth': 3
+        },
+        number={'font': {'color': CHART_COLORS['white'], 'family': CHART_FONT['family'], 'size': 42}}
     ))
     
-    layout = create_chart_layout('Risk Assessment Gauge')
-    layout['height'] = 450
+    layout = create_premium_chart_layout('Premium Risk Assessment Matrix')
+    layout['height'] = 500
     fig.update_layout(layout)
     return fig
 
 def chart_6_executive_performance():
-    """Executive Performance Summary (Line/Area)"""
+    """Executive Performance Premium Summary"""
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
-    performance = [87, 89, 88, 91, 93, 90, 92, 94, 93, 94]
-    target = [90] * len(months)
-    benchmark = [85, 86, 87, 88, 89, 89, 90, 90, 91, 91]
+    performance = [91, 93, 92, 95, 96, 94, 95, 97, 96, 97]
+    target = [95] * len(months)
+    benchmark = [88, 89, 90, 90, 91, 91, 92, 92, 93, 93]
     
     fig = go.Figure()
     
-    # Actual performance
+    # Premium actual performance
     fig.add_trace(go.Scatter(
         x=months,
         y=performance,
         mode='lines+markers',
-        name='Actual Performance',
-        line=dict(color=CHART_COLORS['gold'], width=4),
-        marker=dict(size=10, color=CHART_COLORS['gold']),
+        name='Elite Performance',
+        line=dict(color=CHART_COLORS['primary_gold'], width=5, shape='spline'),
+        marker=dict(
+            size=12, 
+            color=CHART_COLORS['secondary_gold'], 
+            line=dict(color=CHART_COLORS['primary_gold'], width=3)
+        ),
         fill='tonexty',
-        fillcolor=f"rgba{tuple(list(bytes.fromhex(CHART_COLORS['gold'][1:])) + [0.3])}",
-        hovertemplate='<b>Actual</b><br>%{x}: %{y}%<extra></extra>'
+        fillcolor=f"rgba(212, 175, 55, 0.15)",
+        hovertemplate='<b>Elite Performance</b><br>%{x}: <b>%{y}%</b><extra></extra>'
     ))
     
-    # Target line
+    # Premium target line
     fig.add_trace(go.Scatter(
         x=months,
         y=target,
         mode='lines',
-        name='Target (90%)',
-        line=dict(color=CHART_COLORS['silver'], width=2, dash='dash'),
-        hovertemplate='<b>Target</b><br>%{x}: %{y}%<extra></extra>'
+        name='Excellence Target (95%)',
+        line=dict(color=CHART_COLORS['white'], width=3, dash='dash'),
+        hovertemplate='<b>Target</b><br>%{x}: <b>%{y}%</b><extra></extra>'
     ))
     
     # Industry benchmark
@@ -510,96 +759,119 @@ def chart_6_executive_performance():
         x=months,
         y=benchmark,
         mode='lines',
-        name='Industry Benchmark',
-        line=dict(color=CHART_COLORS['light_blue'], width=2, dash='dot'),
-        hovertemplate='<b>Benchmark</b><br>%{x}: %{y}%<extra></extra>'
+        name='Industry Standard',
+        line=dict(color=CHART_COLORS['medium_grey'], width=2, dash='dot'),
+        hovertemplate='<b>Industry</b><br>%{x}: <b>%{y}%</b><extra></extra>'
     ))
     
-    layout = create_chart_layout('Executive Performance Summary')
+    layout = create_premium_chart_layout('Executive Performance Excellence Summary')
     layout['xaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']),
-        title=dict(text='Month', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family']))
+        title=dict(
+            text='<b>Month</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['yaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']),
-        title=dict(text='Performance Score (%)', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'])),
-        range=[80, 100]
+        title=dict(
+            text='<b>Excellence Score (%)</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        range=[85, 100],
+        gridcolor=CHART_COLORS['dark_grey']
     )
-    layout['legend'] = dict(font=dict(color=CHART_COLORS['white'], family=CHART_FONT['family']))
     
     fig.update_layout(layout)
     return fig
 
 def chart_7_regulatory_risk():
-    """Regulatory Risk by Category (Heatmap/Bar)"""
-    categories = ['USP <797>', 'USP <800>', 'USP <825>', 'FDA 503B', 'State Board', 'cGMP', 'Environmental']
-    risk_scores = [25, 45, 15, 35, 30, 40, 20]
+    """Premium Regulatory Risk by Excellence Category"""
+    categories = ['USP <797>\nElite', 'USP <800>\nPremium', 'USP <825>\nAdvanced', 'FDA 503B\nExcellence', 'State Board\nMastery', 'cGMP\nPlatinum', 'Environmental\nElite']
+    risk_scores = [12, 25, 8, 18, 15, 22, 10]
     
-    # Color mapping for risk levels
+    # Premium color mapping
     colors = []
     for score in risk_scores:
-        if score < 30:
-            colors.append(CHART_COLORS['green'])
-        elif score < 60:
-            colors.append(CHART_COLORS['amber'])
+        if score < 15:
+            colors.append(CHART_COLORS['primary_gold'])
+        elif score < 30:
+            colors.append(CHART_COLORS['warning'])
         else:
-            colors.append(CHART_COLORS['red'])
+            colors.append(CHART_COLORS['danger'])
     
     fig = go.Figure()
     
     fig.add_trace(go.Bar(
         x=categories,
         y=risk_scores,
-        marker=dict(color=colors, line=dict(color=CHART_COLORS['white'], width=1)),
-        text=[f'{score}%' for score in risk_scores],
+        marker=dict(
+            color=colors, 
+            line=dict(color=CHART_COLORS['white'], width=2),
+            pattern_shape="/"
+        ),
+        text=[f'<b>{score}%</b>' for score in risk_scores],
         textposition='auto',
-        textfont=dict(size=CHART_FONT['data_label_size'], color=CHART_COLORS['white'], family=CHART_FONT['family']),
-        hovertemplate='<b>%{x}</b><br>Risk Level: %{y}%<extra></extra>'
+        textfont=dict(
+            size=CHART_FONT['data_label_size']+2, 
+            color=CHART_COLORS['white'], 
+            family=CHART_FONT['family']
+        ),
+        hovertemplate='<b>%{x}</b><br><b>Risk Level: %{y}%</b><extra></extra>'
     ))
     
-    layout = create_chart_layout('Regulatory Risk by Category')
+    layout = create_premium_chart_layout('Premium Regulatory Risk Excellence Matrix')
     layout['xaxis'] = dict(
         color=CHART_COLORS['white'],
-        tickfont=dict(size=CHART_FONT['axis_x_size']-2, family=CHART_FONT['family']),  # Slightly smaller for category names
-        title=dict(text='Regulatory Category', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'])),
-        tickangle=-45
+        tickfont=dict(size=CHART_FONT['axis_x_size']-1, family=CHART_FONT['family']),
+        title=dict(
+            text='<b>Regulatory Excellence Categories</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        tickangle=-30,
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['yaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']),
-        title=dict(text='Risk Level (%)', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'])),
-        range=[0, 100]
+        title=dict(
+            text='<b>Risk Level (%)</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        range=[0, 100],
+        gridcolor=CHART_COLORS['dark_grey']
     )
     
     fig.update_layout(layout)
     return fig
 
 def chart_8_upcoming_deadlines():
-    """Upcoming Deadlines Tracker (Timeline/Gantt-style)"""
-    tasks = ['Annual Inspection Prep', 'USP <797> Training Update', 'Environmental Validation', 'Quality Review', 'Equipment Calibration']
-    start_dates = [datetime.now() + timedelta(days=10), 
-                   datetime.now() + timedelta(days=5),
-                   datetime.now() + timedelta(days=25),
-                   datetime.now() + timedelta(days=15),
-                   datetime.now() + timedelta(days=35)]
-    durations = [30, 7, 14, 10, 5]  # Days
+    """Premium Upcoming Deadlines Executive Tracker"""
+    tasks = ['Elite Annual Review', 'USP <797> Premium Update', 'Environmental Excellence', 'Quality Leadership Review', 'Equipment Elite Calibration']
+    start_dates = [datetime.now() + timedelta(days=15), 
+                   datetime.now() + timedelta(days=8),
+                   datetime.now() + timedelta(days=30),
+                   datetime.now() + timedelta(days=20),
+                   datetime.now() + timedelta(days=40)]
+    durations = [25, 10, 18, 12, 7]  # Days
     
     fig = go.Figure()
     
-    # Color coding based on urgency (days until start)
+    # Premium color coding
     colors = []
     for start_date in start_dates:
         days_until = (start_date - datetime.now()).days
-        if days_until <= 7:
-            colors.append(CHART_COLORS['red'])
-        elif days_until <= 20:
-            colors.append(CHART_COLORS['amber'])
+        if days_until <= 10:
+            colors.append(CHART_COLORS['danger'])
+        elif days_until <= 25:
+            colors.append(CHART_COLORS['warning'])
         else:
-            colors.append(CHART_COLORS['green'])
+            colors.append(CHART_COLORS['primary_gold'])
     
-    # Create horizontal bars for timeline
+    # Create premium timeline bars
     for i, (task, start, duration, color) in enumerate(zip(tasks, start_dates, durations, colors)):
         fig.add_trace(go.Bar(
             y=[task],
@@ -607,12 +879,16 @@ def chart_8_upcoming_deadlines():
             base=[start],
             orientation='h',
             name=task,
-            marker_color=color,
+            marker=dict(
+                color=color,
+                line=dict(color=CHART_COLORS['white'], width=2),
+                opacity=0.8
+            ),
             showlegend=False,
-            hovertemplate=f'<b>{task}</b><br>Start: {start.strftime("%Y-%m-%d")}<br>Duration: {duration} days<extra></extra>'
+            hovertemplate=f'<b>{task}</b><br>Start: <b>{start.strftime("%Y-%m-%d")}</b><br>Duration: <b>{duration} days</b><extra></extra>'
         ))
     
-    # Add "today" line
+    # Premium "today" indicator
     today = datetime.now()
     fig.add_shape(
         type="line",
@@ -620,101 +896,124 @@ def chart_8_upcoming_deadlines():
         x1=today,
         y0=-0.5,
         y1=len(tasks)-0.5,
-        line=dict(color=CHART_COLORS['white'], width=3, dash="dash")
+        line=dict(color=CHART_COLORS['primary_gold'], width=4, dash="solid")
     )
     
-    layout = create_chart_layout('Upcoming Deadlines Tracker')
+    layout = create_premium_chart_layout('Executive Deadline Excellence Tracker')
     layout['xaxis'] = dict(
         color=CHART_COLORS['white'],
         tickfont=dict(size=CHART_FONT['axis_x_size'], family=CHART_FONT['family']),
-        title=dict(text='Timeline', font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'])),
-        type='date'
+        title=dict(
+            text='<b>Premium Timeline</b>', 
+            font=dict(size=CHART_FONT['axis_title_size'], family=CHART_FONT['family'], color=CHART_COLORS['primary_gold'])
+        ),
+        type='date',
+        gridcolor=CHART_COLORS['dark_grey']
     )
     layout['yaxis'] = dict(
         color=CHART_COLORS['white'],
-        tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family'])
+        tickfont=dict(size=CHART_FONT['axis_y_size'], family=CHART_FONT['family']),
+        gridcolor=CHART_COLORS['dark_grey']
     )
     
     fig.update_layout(layout)
     return fig
 
 def create_download_link(content, filename):
-    """Create download link for large content"""
+    """Create premium download link for executive content"""
     if len(content) > 45000:
-        # In a real implementation, this would save to Google Drive
-        # For now, we'll create a text download
         buffer = io.StringIO()
         buffer.write(content)
         buffer.seek(0)
         
         return st.download_button(
-            label="📥 Download Full Content",
+            label="📥 Download Executive Report",
             data=buffer.getvalue(),
-            file_name=f"{filename}_{datetime.now().strftime('%Y%m%d')}.txt",
+            file_name=f"LexCura_Executive_{filename}_{datetime.now().strftime('%Y%m%d')}.txt",
             mime="text/plain",
-            help="Content is too large to display. Click to download the full report."
+            help="Premium executive content - Click to download the comprehensive compliance report.",
+            key=f"download_{filename}"
         )
     return None
 
 def main():
-    """Main dashboard application"""
+    """Premium Dashboard Application"""
     
-    # Header
-    st.markdown('<h1 class="main-header">LexCura Compliance Dashboard</h1>', unsafe_allow_html=True)
+    # Premium Logo Section
+    st.markdown("""
+    <div class="logo-container">
+        <img src="https://drive.google.com/uc?export=view&id=1KUnvmqcbtvyyqqx4R8z5dmLlcNFlSwcC" 
+             alt="LexCura Logo" style="max-height: 80px;">
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Get client ID from URL parameters (FIXED)
-    client_id = st.query_params.get("client_id", "CB999")
+    # Premium Header
+    st.markdown('<h1 class="main-header">LexCura Elite Compliance Excellence</h1>', unsafe_allow_html=True)
     
-    # Load client data
+    # Get client ID from URL parameters
+    client_id = st.query_params.get("client_id", "11AA")  # Updated default client ID
+    
+    # Load premium client data
     client_data = load_client_data(client_id)
     
-    # Client information card
+    # Premium Client Information Card
     st.markdown(f"""
     <div class="client-info-card">
-        <h2 style="color: {CHART_COLORS['gold']}; margin-bottom: 1rem; font-family: {CHART_FONT['family']};">
-            📊 {client_data['CLIENT NAME']} - Compliance Overview
+        <h2 style="color: {CHART_COLORS['primary_gold']}; margin-bottom: 1.5rem; font-family: {CHART_FONT['title_family']}; font-size: 1.8rem;">
+            ⚜️ {client_data['CLIENT NAME']} - Executive Compliance Overview
         </h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
             <div class="metric-container">
-                <strong style="color: {CHART_COLORS['gold']};">Client ID</strong><br>
-                {client_data['UNIQUE CLIENT ID']}
+                <strong style="color: {CHART_COLORS['primary_gold']}; font-size: 1.1rem;">Elite Client ID</strong><br>
+                <span style="font-size: 1.3rem; font-weight: 600;">{client_data['UNIQUE CLIENT ID']}</span>
             </div>
             <div class="metric-container">
-                <strong style="color: {CHART_COLORS['gold']};">Service Tier</strong><br>
-                {client_data['TIER']} • {client_data['REGION']}
+                <strong style="color: {CHART_COLORS['primary_gold']}; font-size: 1.1rem;">Premium Service Tier</strong><br>
+                <span style="font-size: 1.3rem; font-weight: 600;">{client_data['TIER']} • {client_data['REGION']}</span>
             </div>
             <div class="metric-container alert-{client_data['ALERT LEVEL'].lower()}">
-                <strong style="color: {CHART_COLORS['gold']};">Alert Status</strong><br>
-                {client_data['ALERT LEVEL']} • {client_data['STATUS']}
+                <strong style="color: {CHART_COLORS['primary_gold']}; font-size: 1.1rem;">Excellence Status</strong><br>
+                <span style="font-size: 1.3rem; font-weight: 600;">{client_data['ALERT LEVEL']} • {client_data['STATUS']}</span>
             </div>
             <div class="metric-container">
-                <strong style="color: {CHART_COLORS['gold']};">Last Updated</strong><br>
-                {client_data['DATE SCRAPED']}
+                <strong style="color: {CHART_COLORS['primary_gold']}; font-size: 1.1rem;">Last Executive Update</strong><br>
+                <span style="font-size: 1.3rem; font-weight: 600;">{client_data['DATE SCRAPED']}</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Force refresh button (FIXED)
+    # Premium control buttons
     col1, col2, col3 = st.columns([1, 1, 4])
     with col1:
-        if st.button("🔄 Force Refresh", help="Clear cache and reload data"):
+        if st.button("🔄 Elite Refresh", help="Refresh premium data analytics"):
             st.cache_data.clear()
             st.rerun()
     
-    # Executive Summary
+    # Executive Summary Section
     if client_data.get('EXECUTIVE SUMMARY'):
         st.markdown(f"""
-        <div class="chart-container">
-            <h3 style="color: {CHART_COLORS['gold']}; font-family: {CHART_FONT['family']};">📋 Executive Summary</h3>
-            <p style="line-height: 1.6; color: {CHART_COLORS['white']};">{client_data['EXECUTIVE SUMMARY']}</p>
+        <div class="executive-summary">
+            <h3 class="section-title">📊 Executive Intelligence Summary</h3>
+            <p style="line-height: 1.8; color: {CHART_COLORS['white']}; font-size: 1.1rem; font-weight: 400;">
+                {client_data['EXECUTIVE SUMMARY']}
+            </p>
         </div>
         """, unsafe_allow_html=True)
     
-    # Charts section
-    st.markdown(f"<h2 style='color: {CHART_COLORS['silver']}; font-family: {CHART_FONT['family']}; text-align: center; margin: 2rem 0;'>📈 Interactive Analytics Dashboard</h2>", unsafe_allow_html=True)
+    # Premium Analytics Section
+    st.markdown(f"""
+    <div style="text-align: center; margin: 3rem 0;">
+        <h2 style="color: {CHART_COLORS['secondary_gold']}; font-family: {CHART_FONT['title_family']}; font-size: 2.2rem; font-weight: 600;">
+            📈 Executive Analytics Intelligence Dashboard
+        </h2>
+        <div style="width: 100px; height: 2px; background: linear-gradient(90deg, transparent, {CHART_COLORS['primary_gold']}, transparent); margin: 1rem auto;"></div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Row 1: Financial and Compliance Overview
+    # Premium Charts Layout
+    
+    # Row 1: Financial Excellence and Compliance Matrix
     col1, col2 = st.columns(2)
     with col1:
         st.markdown('<div class="chart-container">', unsafe_allow_html=True)
@@ -726,7 +1025,7 @@ def main():
         st.plotly_chart(chart_2_compliance_excellence(), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # Row 2: Monitoring and Alerts
+    # Row 2: Executive Monitoring and Premium Alerts
     col1, col2 = st.columns(2)
     with col1:
         st.markdown('<div class="chart-container">', unsafe_allow_html=True)
@@ -738,7 +1037,7 @@ def main():
         st.plotly_chart(chart_4_alert_status(), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # Row 3: Risk Assessment
+    # Row 3: Risk Assessment and Performance Excellence
     col1, col2 = st.columns(2)
     with col1:
         st.markdown('<div class="chart-container">', unsafe_allow_html=True)
@@ -750,7 +1049,7 @@ def main():
         st.plotly_chart(chart_6_executive_performance(), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # Row 4: Regulatory and Timeline
+    # Row 4: Regulatory Excellence and Executive Timeline
     col1, col2 = st.columns(2)
     with col1:
         st.markdown('<div class="chart-container">', unsafe_allow_html=True)
@@ -762,34 +1061,45 @@ def main():
         st.plotly_chart(chart_8_upcoming_deadlines(), use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
-    # Raw content download section
+    # Premium Executive Content Access
     raw_content = client_data.get('MAIN STRUCTURED CONTENT', '')
-    if raw_content and len(raw_content) > 500:  # Only show if there's substantial content
+    if raw_content and len(raw_content) > 500:
         st.markdown(f"""
         <div class="download-section">
-            <h3 style="color: {CHART_COLORS['light_blue']}; font-family: {CHART_FONT['family']};">📄 Raw Data Access</h3>
-            <p>Detailed compliance data and regulatory content for {client_data['CLIENT NAME']}</p>
+            <h3 style="color: {CHART_COLORS['primary_gold']}; font-family: {CHART_FONT['title_family']}; font-size: 1.6rem;">
+                📄 Executive Intelligence Data Access
+            </h3>
+            <p style="font-size: 1.1rem; color: {CHART_COLORS['light_grey']};">
+                Comprehensive regulatory intelligence and executive compliance analytics for {client_data['CLIENT NAME']}
+            </p>
         </div>
         """, unsafe_allow_html=True)
         
-        # Show truncated content
+        # Premium content preview
         if len(raw_content) > 1000:
             st.text_area(
-                "Content Preview (truncated)", 
-                raw_content[:1000] + "\n\n... (content truncated)", 
-                height=150,
+                "Executive Content Preview", 
+                raw_content[:1000] + "\n\n... (Executive content continues - download for full intelligence report)", 
+                height=180,
                 disabled=True
             )
-            create_download_link(raw_content, f"compliance_data_{client_id}")
+            create_download_link(raw_content, f"executive_intelligence_{client_id}")
         else:
-            st.text_area("Full Content", raw_content, height=200, disabled=True)
+            st.text_area("Full Executive Intelligence", raw_content, height=220, disabled=True)
     
-    # Footer
+    # Premium Footer
     st.markdown("---")
     st.markdown(f"""
-    <div style="text-align: center; color: {CHART_COLORS['grey']}; font-family: {CHART_FONT['family']};">
-        <p><strong>LexCura</strong> - Elite Automated Compliance for 503B Sterile Manufacturing</p>
-        <p>Dashboard generated: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')} | Client: {client_id}</p>
+    <div style="text-align: center; color: {CHART_COLORS['medium_grey']}; font-family: {CHART_FONT['family']}; margin-top: 2rem;">
+        <p style="font-size: 1.2rem; font-weight: 600; color: {CHART_COLORS['primary_gold']};">
+            <strong>LexCura Elite</strong> - Premium Automated Compliance Excellence for 503B Elite Manufacturing
+        </p>
+        <p style="font-size: 1rem; margin-top: 1rem;">
+            Executive Dashboard Generated: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')} | Elite Client: {client_id}
+        </p>
+        <p style="font-size: 0.9rem; color: {CHART_COLORS['dark_grey']}; margin-top: 0.5rem;">
+            £6,000/month Premium Service | Confidential Executive Intelligence
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
