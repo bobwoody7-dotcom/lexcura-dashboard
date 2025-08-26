@@ -1,2 +1,2 @@
-# lexcura-dashboard
+# lexcura dashboard
 Lexcura Client Dashboard
