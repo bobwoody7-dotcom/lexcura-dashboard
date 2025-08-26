@@ -1,6 +1,6 @@
 # LexCura Interactive Compliance Dashboard
 # Production-ready Streamlit app for 503B compliance monitoring
-# Copy this ENTIRE file content into your app.py
+# Fixed version with updated Streamlit functions
 
 import streamlit as st
 import pandas as pd
@@ -662,9 +662,8 @@ def main():
     # Header
     st.markdown('<h1 class="main-header">LexCura Compliance Dashboard</h1>', unsafe_allow_html=True)
     
-    # Get client ID from URL parameters
-    query_params = st.experimental_get_query_params()
-    client_id = query_params.get("client_id", ["CB999"])[0]
+    # Get client ID from URL parameters (FIXED)
+    client_id = st.query_params.get("client_id", "CB999")
     
     # Load client data
     client_data = load_client_data(client_id)
@@ -696,12 +695,12 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Force refresh button
+    # Force refresh button (FIXED)
     col1, col2, col3 = st.columns([1, 1, 4])
     with col1:
         if st.button("🔄 Force Refresh", help="Clear cache and reload data"):
             st.cache_data.clear()
-            st.experimental_rerun()
+            st.rerun()
     
     # Executive Summary
     if client_data.get('EXECUTIVE SUMMARY'):
