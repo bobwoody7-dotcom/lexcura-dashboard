@@ -1,5 +1,4 @@
 # Elite Enterprise Compliance Dashboard Requirements
-# Pinned versions for maximum stability and enterprise deployment
 
 # Core Streamlit Framework
 streamlit==1.28.1
@@ -11,7 +10,6 @@ numpy==1.24.3
 
 # Premium Visualization Libraries
 plotly==5.17.0
-plotly-express==0.4.1
 
 # Google Sheets Integration
 gspread==5.12.0
@@ -19,9 +17,6 @@ google-auth==2.23.4
 google-auth-oauthlib==1.1.0
 google-auth-httplib2==0.1.1
 google-api-python-client==2.108.0
-
-# Authentication & Security
-google-oauth2-lib==0.0.1
 oauth2client==4.1.3
 
 # Enhanced Data Export Capabilities
@@ -47,12 +42,3 @@ typing-extensions==4.8.0
 
 # Enhanced JSON Processing
 ujson==5.8.0
-
-# Optional: Advanced Analytics (uncomment if needed)
-# scipy==1.11.4
-# scikit-learn==1.3.2
-# statsmodels==0.14.0
-
-# Optional: Enhanced Styling (uncomment if needed)  
-# streamlit-aggrid==0.3.4
-# streamlit-card==0.0.5
