@@ -1,0 +1,147 @@
+/* Executive Dashboard Styles - UI-REFACTOR-GOLD-2025 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #0F1113;
+  --card: #1B1D1F;
+  --accent: #D4AF37;
+  --accent-light: #FFCF66;
+  --muted: #6C757D;
+  --text: #F5F6F7;
+  --text-muted: #B8B9BB;
+  --success: #3DBC6B;
+  --error: #E4574C;
+  --border: rgba(255,255,255,0.06);
+}
+
+/* Reset and base */
+* {
+  box-sizing: border-box;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
+  border-color: var(--accent);
+}
+
+/* KPI Components */
+.kpi {
+  text-align: center;
+}
+
+.kpi-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.kpi-delta {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.kpi-delta.positive {
+  color: var(--success);
+}
+
+.kpi-delta.negative {
+  color: var(--error);
+}
+
+.kpi-delta.neutral {
+  color: var(--muted);
+}
+
+/* Sparkline container */
+.sparkline {
+  height: 40px;
+  margin-top: 0.5rem;
+}
+
+/* Navigation */
+.nav-container {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.logo-section h1 {
+  color: var(--accent) !important;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Buttons */
+.stButton > button {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--bg);
+  border: none;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .card, .stButton > button {
+    transition: none;
+  }
+  
+  .card:hover {
+    transform: none;
+  }
+}
+
+/* Contrast helpers */
+.high-contrast .kpi-value {
+  color: #FFCF66;
+}
+
+.high-contrast .card {
+  border-color: var(--accent);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, #2A2C2F 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
