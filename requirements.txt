@@ -1,27 +1,35 @@
-# LexCura Premium Dashboard - Required Dependencies
+# LexCura Elite Compliance Dashboard - Required Dependencies
+# Compatible with Python 3.8+ and Streamlit Cloud deployment
+
 # Core Streamlit and Data Processing
-streamlit>=1.28.0
-pandas>=2.0.0
-numpy>=1.24.0
+streamlit>=1.28.0,<2.0.0
+pandas>=2.0.0,<3.0.0
+numpy>=1.24.0,<2.0.0
 
 # Plotting and Visualization
-plotly>=5.15.0
+plotly>=5.15.0,<6.0.0
 
-# Google Sheets Integration (REQUIRED - preserving original)
-gspread>=5.12.4
-google-auth>=2.23.0
-google-auth-oauthlib>=1.1.0
-google-auth-httplib2>=0.1.1
+# Google Sheets Integration (REQUIRED for client data)
+gspread>=5.12.4,<6.0.0
+google-auth>=2.23.0,<3.0.0
+google-auth-oauthlib>=1.1.0,<2.0.0
+google-auth-httplib2>=0.1.1,<1.0.0
 
-# Optional Interactive Features (with fallbacks)
+# Optional Interactive Features (with graceful fallbacks in code)
 streamlit-plotly-events>=0.0.6
-streamlit-lottie>=0.0.5
 kaleido>=0.2.1
 
-# Export and File Processing (optional)
-Pillow>=10.0.0
-reportlab>=4.0.0
-img2pdf>=0.4.4
+# Standard Library Extensions (used by the app)
+datetime
+json
+io
+zipfile
+base64
+time
+logging
+
+# File Processing and Export Capabilities
+Pillow>=10.0.0,<11.0.0
 
 # Utility Libraries
-requests>=2.31.0
+requests>=2.31.0,<3.0.0
