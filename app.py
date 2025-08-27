@@ -624,7 +624,17 @@ def init_session_state():
 def connect_to_sheets():
     """Connect to Google Sheets using service account credentials"""
     try:
-        credentials_info = json.loads(st.secrets["gcp_service_account"])
+        # Handle both string and dict formats for credentials
+        if "gcp_service_account" in st.secrets:
+            credentials_data = st.secrets["gcp_service_account"]
+            if isinstance(credentials_data, str):
+                credentials_info = json.loads(credentials_data)
+            else:
+                credentials_info = dict(credentials_data)
+        else:
+            st.warning("Google Sheets credentials not found. Using demo data.")
+            return None
+            
         credentials = Credentials.from_service_account_info(
             credentials_info,
             scopes=[
@@ -634,8 +644,11 @@ def connect_to_sheets():
         )
         gc = gspread.authorize(credentials)
         return gc
+    except json.JSONDecodeError as e:
+        st.warning(f"Google Sheets credentials parsing error: {str(e)}. Using demo data.")
+        return None
     except Exception as e:
-        st.error(f"Google Sheets connection failed: {str(e)}")
+        st.warning(f"Google Sheets connection failed: {str(e)}. Using demo data.")
         return None
 
 @st.cache_data(ttl=60)
@@ -1027,6 +1040,10 @@ def chart_deadlines_timeline_luxury(data):
 # Luxury UI Components
 def render_luxury_header(client_data):
     """Render luxury executive dashboard header"""
+    # Safely get date with fallback
+    date_scraped = client_data.get('DATE_SCRAPED', datetime.now().strftime('%Y-%m-%d'))
+    client_name = client_data.get('CLIENT_NAME', client_data.get('CLIENT NAME', 'Elite Client'))
+    
     st.markdown(f"""
     <div class="luxury-header">
         <div class="brand-section">
@@ -1035,11 +1052,11 @@ def render_luxury_header(client_data):
         </div>
         <div class="header-status">
             <div style="font-size: 1.1rem; color: #F5F6F7; font-weight: 600;">
-                {client_data['CLIENT NAME']}
+                {client_name}
             </div>
             <div class="status-live">
                 <div class="status-indicator"></div>
-                Live Data • Updated {client_data['DATE_SCRAPED']}
+                Live Data • Updated {date_scraped}
             </div>
         </div>
     </div>
@@ -1048,29 +1065,36 @@ def render_luxury_header(client_data):
 def render_luxury_sidebar(client_data):
     """Render luxury sidebar with client information"""
     with st.sidebar:
+        # Safely extract client data with fallbacks
+        client_id = client_data.get('UNIQUE CLIENT ID', client_data.get('UNIQUE_CLIENT_ID', 'N/A'))
+        tier = client_data.get('TIER', 'Standard')
+        region = client_data.get('REGION', 'Not specified')
+        frequency = client_data.get('DELIVERY FREQUENCY', client_data.get('DELIVERY_FREQUENCY', 'Monthly'))
+        status = client_data.get('STATUS', 'Active')
+        
         st.markdown(f"""
         <div class="sidebar-luxury">
             <div class="sidebar-title-luxury">Client Intelligence</div>
             <div class="client-info">
                 <div class="info-item">
                     <span class="info-label">Client ID</span>
-                    <span class="info-value">{client_data['UNIQUE CLIENT ID']}</span>
+                    <span class="info-value">{client_id}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Service Tier</span>
-                    <span class="info-value" style="color: #D4AF37;">{client_data['TIER']}</span>
+                    <span class="info-value" style="color: #D4AF37;">{tier}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Region</span>
-                    <span class="info-value">{client_data['REGION']}</span>
+                    <span class="info-value">{region}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Update Frequency</span>
-                    <span class="info-value">{client_data['DELIVERY FREQUENCY']}</span>
+                    <span class="info-value">{frequency}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Status</span>
-                    <span class="info-value" style="color: #3DBC6B;">{client_data['STATUS']}</span>
+                    <span class="info-value" style="color: #3DBC6B;">{status}</span>
                 </div>
             </div>
         </div>
@@ -1166,7 +1190,10 @@ def render_luxury_kpis(client_data):
 
 def render_executive_summary(client_data):
     """Render luxury executive summary"""
-    summary = client_data.get('EXECUTIVE SUMMARY', 'No summary available')
+    # Safely get executive summary with fallback
+    summary = client_data.get('EXECUTIVE SUMMARY', 
+              client_data.get('EXECUTIVE_SUMMARY', 
+              'Executive intelligence summary currently being compiled. Premium compliance analytics and regulatory insights are being processed for this client.'))
     
     st.markdown(f"""
     <div class="executive-summary fade-in-luxury">
@@ -1293,6 +1320,7 @@ def main():
                     "ROI Projection Analysis"
                 )
         
+        # Intelligence Hub content with safe data access
         with tab4:
             st.markdown("""
             <div class="luxury-card">
@@ -1318,38 +1346,49 @@ def main():
             </div>
             """, unsafe_allow_html=True)
             
-            # Detailed content access
-            if client_data.get('MAIN STRUCTURED CONTENT'):
-                content = client_data.get('MAIN STRUCTURED CONTENT', '')
-                if len(content) > 100:
-                    st.markdown(f"""
-                    <div class="luxury-card">
-                        <h3 style="color: #D4AF37; margin-bottom: 1.5rem;">Comprehensive Intelligence Report</h3>
-                        <p style="color: #B8B9BB; margin-bottom: 1.5rem;">
-                            Full regulatory intelligence and compliance analysis for {client_data['CLIENT NAME']}
-                        </p>
-                    </div>
-                    """, unsafe_allow_html=True)
+            # Detailed content access with safe key checking
+            main_content = client_data.get('MAIN STRUCTURED CONTENT', client_data.get('MAIN_STRUCTURED_CONTENT', ''))
+            client_name_safe = client_data.get('CLIENT_NAME', client_data.get('CLIENT NAME', 'this client'))
+            
+            if main_content and len(main_content) > 100:
+                st.markdown(f"""
+                <div class="luxury-card">
+                    <h3 style="color: #D4AF37; margin-bottom: 1.5rem;">Comprehensive Intelligence Report</h3>
+                    <p style="color: #B8B9BB; margin-bottom: 1.5rem;">
+                        Full regulatory intelligence and compliance analysis for {client_name_safe}
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Content preview
+                if len(main_content) > 1000:
+                    preview = main_content[:800] + "..."
+                    st.text_area(
+                        "Intelligence Report Preview", 
+                        preview, 
+                        height=200, 
+                        disabled=True,
+                        help="Full report available for download"
+                    )
                     
-                    # Content preview
-                    if len(content) > 1000:
-                        preview = content[:800] + "..."
-                        st.text_area(
-                            "Intelligence Report Preview", 
-                            preview, 
-                            height=200, 
-                            disabled=True,
-                            help="Full report available for download"
-                        )
-                        
-                        # Download button with luxury styling
-                        st.download_button(
-                            label="📄 Download Complete Intelligence Report",
-                            data=content,
-                            file_name=f"lexcura_intelligence_{client_id}_{datetime.now().strftime('%Y%m%d')}.txt",
-                            mime="text/plain",
-                            help="Download the complete regulatory intelligence report"
-                        )
+                    # Download button with luxury styling
+                    st.download_button(
+                        label="📄 Download Complete Intelligence Report",
+                        data=main_content,
+                        file_name=f"lexcura_intelligence_{client_id}_{datetime.now().strftime('%Y%m%d')}.txt",
+                        mime="text/plain",
+                        help="Download the complete regulatory intelligence report"
+                    )
+            else:
+                st.markdown("""
+                <div class="luxury-card">
+                    <h3 style="color: #D4AF37; margin-bottom: 1.5rem;">Intelligence Report</h3>
+                    <p style="color: #B8B9BB; margin-bottom: 1.5rem;">
+                        Comprehensive regulatory intelligence report is being compiled for this client. 
+                        Advanced analytics and compliance insights will be available shortly.
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
