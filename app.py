@@ -52,53 +52,78 @@ st.set_page_config(
 # UI-REFACTOR-GOLD-2025: Template system integration
 def register_gold_dark_template():
     """Register the Gold Dark template for consistent styling"""
-    gold_dark_template = {
-        "layout": {
-            "paper_bgcolor": "#0F1113",
-            "plot_bgcolor": "rgba(0,0,0,0)",
-            "font": {
-                "family": "Inter, Montserrat, Helvetica Neue, Arial, sans-serif",
-                "color": "#F5F6F7",
-                "size": 14
-            },
-            "title": {
-                "font": {"size": 25, "color": "#F5F6F7", "family": "Inter"},
-                "x": 0.5,
-                "xanchor": "center"
-            },
-            "colorway": ["#D4AF37", "#C0C0C0", "#808080", "#ADD8E6", "#3DBC6B", "#FFCF66", "#E4574C"],
-            "xaxis": {
-                "gridcolor": "rgba(255,255,255,0.1)",
-                "linecolor": "rgba(255,255,255,0.2)",
-                "tickfont": {"size": 16, "color": "#F5F6F7"},
-                "titlefont": {"size": 18, "color": "#F5F6F7"}
-            },
-            "yaxis": {
-                "gridcolor": "rgba(255,255,255,0.1)",
-                "linecolor": "rgba(255,255,255,0.2)",
-                "tickfont": {"size": 16, "color": "#F5F6F7"},
-                "titlefont": {"size": 18, "color": "#F5F6F7"}
-            },
-            "legend": {
-                "font": {"size": 16, "color": "#F5F6F7"},
-                "bgcolor": "rgba(0,0,0,0)"
-            }
-        }
-    }
-    pio.templates["gold_dark"] = gold_dark_template
-    pio.templates.default = "gold_dark"
+    try:
+        # Create a proper Plotly template using go.layout.Template
+        gold_dark_template = go.layout.Template(
+            layout=go.Layout(
+                paper_bgcolor="#0F1113",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(
+                    family="Inter, Montserrat, Helvetica Neue, Arial, sans-serif",
+                    color="#F5F6F7",
+                    size=14
+                ),
+                title=dict(
+                    font=dict(size=25, color="#F5F6F7"),
+                    x=0.5,
+                    xanchor="center"
+                ),
+                colorway=["#D4AF37", "#C0C0C0", "#808080", "#ADD8E6", "#3DBC6B", "#FFCF66", "#E4574C"],
+                xaxis=dict(
+                    gridcolor="rgba(255,255,255,0.1)",
+                    linecolor="rgba(255,255,255,0.2)",
+                    tickfont=dict(size=16, color="#F5F6F7"),
+                    titlefont=dict(size=18, color="#F5F6F7")
+                ),
+                yaxis=dict(
+                    gridcolor="rgba(255,255,255,0.1)",
+                    linecolor="rgba(255,255,255,0.2)",
+                    tickfont=dict(size=16, color="#F5F6F7"),
+                    titlefont=dict(size=18, color="#F5F6F7")
+                ),
+                legend=dict(
+                    font=dict(size=16, color="#F5F6F7"),
+                    bgcolor="rgba(0,0,0,0)"
+                )
+            )
+        )
+        pio.templates["gold_dark"] = gold_dark_template
+        pio.templates.default = "gold_dark"
+    except Exception as e:
+        # Fallback: just set a simple default template
+        pio.templates.default = "plotly_dark"
 
 def apply_executive_styling(fig):
     """Apply executive styling to any Plotly figure"""
+    try:
+        # Try to use the gold_dark template
+        fig.update_layout(template="gold_dark")
+    except:
+        # Fallback to manual styling if template fails
+        fig.update_layout(
+            paper_bgcolor="#0F1113",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#F5F6F7", family="Inter, sans-serif"),
+            title=dict(font=dict(color="#F5F6F7", size=20)),
+            xaxis=dict(gridcolor="rgba(255,255,255,0.1)", tickfont=dict(color="#F5F6F7")),
+            yaxis=dict(gridcolor="rgba(255,255,255,0.1)", tickfont=dict(color="#F5F6F7")),
+            legend=dict(font=dict(color="#F5F6F7"))
+        )
+    
+    # Apply common styling
     fig.update_layout(
-        template="gold_dark",
         height=400,
         margin=dict(l=50, r=50, t=50, b=50),
         transition_duration=600,
         hovermode='closest'
     )
+    
     # Remove marker lines for cleaner look
-    fig.update_traces(marker_line_width=0)
+    try:
+        fig.update_traces(marker_line_width=0)
+    except:
+        pass  # Some chart types don't have marker_line_width
+    
     return fig
 
 # Initialize template system
