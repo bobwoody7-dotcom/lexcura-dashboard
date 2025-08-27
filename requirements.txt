@@ -1,58 +1,27 @@
-# Elite Enterprise Compliance Dashboard Requirements
-# Optimized for Python 3.13 and Streamlit Cloud
+# LexCura Premium Dashboard - Required Dependencies
+# Core Streamlit and Data Processing
+streamlit>=1.28.0
+pandas>=2.0.0
+numpy>=1.24.0
 
-# Core Streamlit Framework
-streamlit==1.28.1
-streamlit-option-menu==0.3.6
+# Plotting and Visualization
+plotly>=5.15.0
 
-# Data Processing & Analysis
-pandas>=2.1.0
-numpy>=1.27.0
+# Google Sheets Integration (REQUIRED - preserving original)
+gspread>=5.12.4
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
 
-# Premium Visualization Libraries
-plotly==5.17.0
-plotly-express==0.4.1
+# Optional Interactive Features (with fallbacks)
+streamlit-plotly-events>=0.0.6
+streamlit-lottie>=0.0.5
+kaleido>=0.2.1
 
-# Google Sheets Integration
-gspread==5.12.0
-google-auth==2.23.4
-google-auth-oauthlib==1.1.0
-google-auth-httplib2==0.1.1
-google-api-python-client==2.108.0
+# Export and File Processing (optional)
+Pillow>=10.0.0
+reportlab>=4.0.0
+img2pdf>=0.4.4
 
-# Authentication & Security
-google-oauth2-lib==0.0.1
-oauth2client==4.1.3
-
-# Enhanced Data Export Capabilities
-openpyxl==3.1.2
-xlsxwriter==3.1.9
-fpdf2==2.7.6
-
-# Date & Time Utilities
-python-dateutil==2.8.2
-pytz==2023.3
-
-# Enhanced Performance & Caching
-cachetools==5.3.2
-
-# Additional Utility Libraries
-requests==2.31.0
-urllib3==2.0.7
-certifi==2023.11.17
-
-# Data Validation & Processing
-pydantic==2.5.0
-typing-extensions==4.8.0
-
-# Enhanced JSON Processing
-ujson==5.8.0
-
-# Optional: Advanced Analytics (uncomment if needed)
-# scipy==1.11.4
-# scikit-learn==1.3.2
-# statsmodels==0.14.0
-
-# Optional: Enhanced Styling (uncomment if needed)  
-# streamlit-aggrid==0.3.4
-# streamlit-card==0.0.5
+# Utility Libraries
+requests>=2.31.0
