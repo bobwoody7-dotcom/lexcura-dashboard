@@ -887,6 +887,20 @@ def load_executive_css():
     
     st.markdown(css_content, unsafe_allow_html=True)
 
+def load_external_css():
+    """Load external CSS file from assets folder for additional styling"""
+    try:
+        css_file_path = Path("assets/styles.css")
+        if css_file_path.exists():
+            with open(css_file_path, 'r', encoding='utf-8') as f:
+                st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        else:
+            # Silently skip if file doesn't exist - not critical for functionality
+            logging.info("External CSS file not found: assets/styles.css")
+    except Exception as e:
+        logging.warning(f"Could not load external CSS: {e}")
+        # Continue without external CSS - app has inline styles as fallback
+
 # ============================================================================
 # AUTHENTICATION SYSTEM
 # ============================================================================
@@ -1516,7 +1530,8 @@ def main():
     configure_executive_page()
     initialize_session_state()
     register_executive_plotly_theme()
-    load_executive_css()
+    load_executive_css()          # Load inline CSS styles
+    load_external_css()           # Load external CSS file from assets/
     
     # Check authentication
     if not check_authentication():
